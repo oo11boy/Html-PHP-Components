@@ -3,10 +3,10 @@ require_once 'renderer.php';
 
 class Router {
     public static function route($url) {
-        // مسیر پایه برای صفحات
+        // Base path for pages
         $basePath = 'app/pages/';
         
-        // اگر URL خالی باشه، به صورت پیش‌فرض home رو لود می‌کنیم
+        // If the URL is empty or 'home', load the home page by default
         if (empty($url) || $url === 'home') {
             $filePath = $basePath . 'home.php';
             if (file_exists($filePath)) {
@@ -15,21 +15,21 @@ class Router {
             }
         }
 
-        // جدا کردن بخش‌های URL
+        // Split URL parts
         $urlParts = explode('/', $url);
         $currentPath = $basePath;
         $params = [];
         $fileToInclude = null;
 
-        // حلقه روی بخش‌های URL برای پیدا کردن فایل یا پارامتر داینامیک
+        // Loop through URL parts to find a file or dynamic parameter
         for ($i = 0; $i < count($urlParts); $i++) {
             $part = $urlParts[$i];
             
-            // بررسی فایل معمولی (مثل about.php)
+            // Check for a static file (e.g., about.php)
             $staticFile = $currentPath . $part . '.php';
-            // بررسی پوشه (مثل article/)
+            // Check for a folder (e.g., article/)
             $folderPath = $currentPath . $part . '/';
-            // بررسی فایل داینامیک (مثل [id].php)
+            // Check for a dynamic file (e.g., [id].php)
             $dynamicFile = $currentPath . '[id].php';
 
             if (file_exists($staticFile)) {
@@ -37,21 +37,21 @@ class Router {
                 break;
             } elseif (file_exists($folderPath)) {
                 $currentPath = $folderPath;
-                // اگر به آخر URL رسیدیم و فایل index.php وجود داره
+                // If we reach the end of the URL and index.php exists
                 if ($i === count($urlParts) - 1 && file_exists($currentPath . 'index.php')) {
                     $fileToInclude = $currentPath . 'index.php';
                 }
             } elseif (file_exists($dynamicFile)) {
-                $params['id'] = $part; // ذخیره پارامتر داینامیک
+                $params['id'] = $part; // Store dynamic parameter
                 $fileToInclude = $dynamicFile;
                 break;
             } else {
-                // اگر هیچ‌کدوم از موارد بالا نبود، 404 نشون بده
+                // If none of the above match, show 404
                 break;
             }
         }
 
-        // رندر کردن فایل پیدا شده
+        // Render the found file
         if ($fileToInclude && file_exists($fileToInclude)) {
             Renderer::renderPage($fileToInclude, $params);
         } else {
