@@ -1,0 +1,30 @@
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    margin: 0;
+    padding: 0;
+}
+header nav {
+    background: #333;
+    padding: 1rem;
+}
+header nav a {
+    color: white;
+    margin: 0 1rem;
+    text-decoration: none;
+}
+.card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 5px;
+}
+footer {
+    background: #333;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
